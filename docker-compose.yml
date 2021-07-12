@@ -1,0 +1,32 @@
+version: "3.4"
+
+networks:
+  glpi:
+
+services:
+  glpi:
+    build: ./glpi
+    container_name: glpi
+    ports:
+      - 80:80
+    volumes:
+#      - ./config_db.php:/var/www/html/config/config_db.php
+#      - ./glpicrypt.key:/var/www/html/config/glpicrypt.key
+      - glpi-data:/var/www/html/files
+    networks:
+      - glpi
+  mysql:
+    image: mysql:5.7
+    volumes:
+      - glpi-db:/var/lib/mysql
+    environment:
+      MYSQL_DATABASE: glpi
+      MYSQL_USER: glpi
+      MYSQL_PASSWORD: glpipassword
+      MYSQL_RANDOM_ROOT_PASSWORD: '1'
+    networks:
+      - glpi
+
+volumes:
+  glpi-db:
+  glpi-data:
